@@ -16,6 +16,6 @@ public class Test14_2{
         bk.pay = 3.2f;
         
 
-        System.out.printf("%s, %s, %s, %dpage, %f$",bk.title,bk.writer,bk.maker,bk.pageSize,bk.pay);
+        System.out.printf("%s", args);
     }
 }

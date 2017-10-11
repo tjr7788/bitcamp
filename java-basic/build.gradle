@@ -1,6 +1,24 @@
 apply plugin: 'java'
-
+apply plugin: 'eclipse'
 apply plugin: 'application'
+
+eclipse {
+  jdt {
+    javaRuntimeName = "JavaSE-9"
+
+    file {
+         whenMerged { jdt
+      }
+
+      
+      withProperties { properties ->
+          properties["org.eclipse.jdt.core.compiler.codegen.targetPlatform"] = "9"
+          properties["org.eclipse.jdt.core.compiler.compliance"] = "9"
+          properties["org.eclipse.jdt.core.compiler.source"] = "9"
+      }
+    }
+  }
+}
 compileJava{
     options.encoding = 'UTF-8'
 }

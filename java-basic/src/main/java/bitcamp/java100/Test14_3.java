@@ -14,6 +14,6 @@ public class Test14_3{
         std.phone = "01010203231";
         std.addr = "경기도 남양주";
 
-        System.out.printf("%s, %d, %s, %s\n",std.name, std.age, std.phone, std.addr);
+        System.out.format("%s, %d, %s, %s\n",std.name, std.age, std.phone, std.addr);
         }
 }

@@ -28,7 +28,7 @@ public class Test15_11_2{
         p1.groupExe = true;
         p1.otherRead = true;
         p1.otherWrite = false;
-        p1.otherExe = true;
+        p1.otherExe = true;  
         
         
         System.out.print(p1.isDirectory ? "d" : "-");

@@ -7,6 +7,7 @@ package bitcamp.java100;
 public class Test15_3 {
 
     public static void main(String[] args) {
+        
         byte b1 = 20;
         byte b2 = 22;
         short s1 = 30, s2 = 33;

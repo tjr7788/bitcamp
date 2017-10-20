@@ -3,9 +3,9 @@ package bitcamp.java100;
 
 import java.io.Console;
 
-public class Test21_6 {
+public class Test21_6_1 {
+    
     static Console console;
-
 
     static void prepareConsole() {
         console = System.console();
@@ -15,20 +15,20 @@ public class Test21_6 {
         }
     }
 
-    static long input() {
-        return Long.parseLong(console.readLine("숫자를 입력해주세요 : "));
+    static StringBuffer input() {
+        StringBuffer buf = new StringBuffer(console.readLine("숫자를 입력해주세요 : "));
+        return buf;
     }
 
-    static int[] abc(long num) {
+    static int[] spin(StringBuffer num) {
         int[] arr = new int[10];
         
-        while(num > 0) {
-            arr[(int)(num % 10)]++;
-            num /= 10;
-
+        for(int i = 0; i < num.length(); i++) {
+            arr[(num.charAt(i)-'0')]++;
         }
         return arr;
     }
+    
     static void print(int[] arr) {
         int cnt = 0;
         for(int i : arr) {
@@ -37,11 +37,10 @@ public class Test21_6 {
         }
     }
 
-
     public static void main(String[] args) {
 
         prepareConsole();
-        print(abc(input()));
+        print(spin(input()));
 
     }
 }

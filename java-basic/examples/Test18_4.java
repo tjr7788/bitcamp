@@ -10,9 +10,5 @@ public class Test18_4 {
         if (s1.equals(s2)) {
             System.out.println("같다");
         }
-        
-        
     }
 }
-
-

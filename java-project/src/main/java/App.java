@@ -1,39 +1,66 @@
-//: ## ver 08
-//: - 클래스를 관리하기 쉽도록 별도의 파일로 분리하다. 
-//: - 메서드를 사용하여 반복 코드를 분리한다.
-//: 
-//: 여러 명의 성적을 저장하고 다음과 같이 출력하라!
-//:
-//: 출력내용:
-//: ```
-//: 홍길동, 100,  90,  80, 270,  90.0
-//: 임꺽정,  80,  80,  80, 240,  80.0
-//: 유관순, 100, 100, 100, 300, 100.0
-//: ```
- 
-public class App {
-    
-    //: 합계와 평균을 계산하는 코드를 다음과 같이 별도의 메서드로 분리한다.
-    
-    
+import java.util.Scanner;
 
+public class App {
+    static Scanner sc = new Scanner(System.in);
+    static ScoreController scoreControl = new ScoreController();
+    static MemberController memberControl = new MemberController();
+    static BoardController boardControl = new BoardController();
     public static void main(String[] args) {
         
-        Score[] scores = {new Score(), new Score(), new Score()};
-        
-        Score.init(scores[0], "홍길동", 100, 90, 80);
-        Score.init(scores[1], "임꺽정", 80, 80, 80);
-        Score.init(scores[2], "유관순", 100, 100, 100);
-        
-        //: 학생 성적을 출력한다.
-        for (Score s : scores) {
-            Score.print(s);
+        loop: while (true) {
+            try {
+                System.out.print("명령> ");
+                String[] input = sc.nextLine().toLowerCase().split(" ");
+
+                if (input[0].equals("menu")) {
+                    doMenu();
+                } else if (input[0].equals("help")) {
+                    doHelp();
+                } else if (input[0].equals("quit")) {
+                    doQuit();
+                    break loop;
+                } else if (input[0].equals("go")) {
+                    doGo(input[1]);
+
+                } else {
+                    doErr();
+                }
+            } catch (Exception e) {
+                System.out.println("명령처리중 문제 발생 ");
+            }
+        } // while
+    }
+
+    private static void doGo(String index) {
+        if (index.equals("1")) {
+            scoreControl.execute();
+        } else if (index.equals("2")) {
+            memberControl.execute();
+        } else if (index.equals("3")) {
+            boardControl.execute();
+        } else {
+            System.out.println("해당번호의 메뉴가 없습니다.");
         }
-        
-        
+    }
+
+    private static void doHelp() {
+        System.out.println("[명령]");
+        System.out.println("menu        - 메뉴 목록 출력한다.");
+        System.out.println("go 번호     - 메뉴로 이동한다.");
+        System.out.println("quit        - 프로그램을 종료한다.");
+    }
+
+    private static void doMenu() {
+        System.out.println("1 성적관리");
+        System.out.println("2 회원관리");
+        System.out.println("3 게시판");
+    }
+
+    private static void doErr() {
+        System.out.println("수행할 수 없는 명령입니다.");
+    }
+
+    private static void doQuit() {
+        System.out.println("프로그램을 종료합니다.");
     }
 }
-
-
-
-

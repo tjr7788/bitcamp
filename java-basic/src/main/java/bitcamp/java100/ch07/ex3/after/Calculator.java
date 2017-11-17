@@ -9,6 +9,10 @@ public class Calculator {
     }
 
     void divide(int value) {
+        if (value == 0) {
+            System.err.println("0으로 나누면 안됩니다!");
+            return;
+        }
         this.result /= value;
     }
 

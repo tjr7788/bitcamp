@@ -1,21 +1,47 @@
+// 컬렉션 - Queue 활용
+// => Queue는 먼저 저장된 값이 먼저 나오는 방식으로 데이터를 관리한다.
 package bitcamp.java100.ch09.ex5;
 
 public class Test1 {
-    
-    static void printList(Queue list) {
-        for(int i = 0; i < list.size(); i++) {
-            System.out.printf("%s \n", list.poll());
-        }
-    }
+
     public static void main(String[] args) {
-        Queue list = new Queue();
         
+        Queue queue = new Queue();
         
-        list.add("홍길동");
-        list.add("홍길동1");
-        list.add("홍길동2");
-        list.add("홍길동3");
-        System.out.printf("%s \n", list.poll());
-        System.out.printf("%s \n", list.poll());
+        queue.add("홍길동");
+        queue.add("임꺽정");
+        queue.add("유관순");
+        queue.add("안중근");
+        queue.add("윤봉길");
+        
+        System.out.println(queue.poll());
+        System.out.println(queue.poll());
+        System.out.println(queue.poll());
+        System.out.println(queue.poll());
+        System.out.println(queue.poll());
+        System.out.println(queue.poll());
+        System.out.println(queue.poll());
+        
+        queue.add("홍길동");
+        queue.add("임꺽정");
+        
+        System.out.println(queue.poll());
+        System.out.println(queue.poll());
+        System.out.println(queue.poll());
+        System.out.println(queue.poll());
+        
     }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+

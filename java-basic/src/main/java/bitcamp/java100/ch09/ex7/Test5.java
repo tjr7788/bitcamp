@@ -1,3 +1,4 @@
+// 컬렉션 API - HashSet II
 package bitcamp.java100.ch09.ex7;
 
 import java.util.HashSet;
@@ -6,86 +7,83 @@ public class Test5 {
     
     static class Contact {
         String name;
+        String email;
+        String tel;
         
-        public Contact(String name) {
+        public Contact(String name, String email, String tel) {
             this.name = name;
-        }
-
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ((name == null) ? 0 : name.hashCode());
-            return result;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
-            Contact other = (Contact) obj;
-            if (name == null) {
-                if (other.name != null)
-                    return false;
-            } else if (!name.equals(other.name))
-                return false;
-            return true;
+            this.email = email;
+            this.tel = tel;
         }
     }
+    
+    
     public static void main(String[] args) {
         
-        HashSet<Contact> list = new HashSet<>();
-        Contact c1 = new Contact("홍길동");
-        Contact c2 = new Contact("홍길동");
-        Contact c3 = new Contact("홍길동");
+        HashSet<Contact> set = new HashSet<>();
         
-        System.out.println(c1.hashCode());
+        Contact c1 = new Contact("홍길동", "hong@test.com", "1111-1111");
+        Contact c2 = new Contact("홍길동", "hong@test.com", "1111-1111");
+        Contact c3 = new Contact("홍길동", "hong@test.com", "1111-1111");
+        
+        System.out.println(c1 == c2); // false
+        System.out.println(c1 == c3); // false
+        System.out.println(c2 == c3); // false
+        
+        // c1, c2, c3의 hashCode()의 리턴 값이 다르다.
+        System.out.println(c1.hashCode()); 
         System.out.println(c2.hashCode());
         System.out.println(c3.hashCode());
         
-        
+        // c1, c2, c3의 equals() 비교 값이 false이다.
         System.out.println(c1.equals(c2));
         System.out.println(c1.equals(c3));
+        System.out.println(c2.equals(c3));
         
-        list.add(c1);
-        list.add(c2);
-        list.add(c3);
+        // c1, c2, c3는 비록 같은 내용을 갖고 있지만,  
+        // 다른 객체로 취급한다. 그래서 모두 저장 가능하다.
+        set.add(c1);
+        set.add(c2);
+        set.add(c3);
         
-        System.out.println(list.size());
-        Contact[] arr = new Contact[list.size()];
-        list.toArray(arr);
+        // 컬렉션에 저장된 객체(주소)들의 개수
+        System.out.println(set.size());
+
+        Contact[] arr = new Contact[set.size()];
+        set.toArray(arr);
+        
         for (Contact c : arr) {
-            System.out.println(c.name);
+            System.out.printf("%s, %s, %s\n", c.name, c.email, c.tel);
         }
         
-        
-//        list.add(s1);
-//        list.add(s2);
-//        list.add(s3);
-//        
-//        list.add(s1);   //같은 값은 중복 안된다.
-//        
-//        list.add(null); //null값 가능
-//        
-//        System.out.println(list.size());
-//        
-//        String[] arr = new String[list.size()];
-//        String[] arr2 = list.toArray(arr);
-//        
-//        if (arr == arr2) {
-//            System.out.println("같다");
-//        }
-//        else {
-//            System.out.println("arr != arr2");
-//        }
-//        
-//        for(String s : arr) {  //저장순서대로 꺼내기 가능
-//            System.out.println(s);
-//        }
+        // HashSet이 중복 데이터임을 판단하는 기준 
+        // => HashSet은 집합의 기능을 구현한 것이기 때문에 중복 데이터를 저장하지 않는다.
+        // => 중복 데이터의 기준은? 
+        //    hashCode() 리턴 값이 같다.
+        //    equals()로 비교했을 때 리턴 값이 true이다.
+        // => 그러나 Object로부터 그냥 상속 받은 hashCode()는 
+        //    인스턴스가 다르면 무조건 다른 해시 값을 리턴한다.
+        //    또한 Object로부터 그냥 상속 받은 equals()는
+        //    인스턴스가 다르면 무조건 false를 리턴한다.
+        // => 그래서,
+        //    HashSet에 보관할 객체는 반드시 Object의 이들 메서드를 재정의 해야 한다.
+        //    그래야만 같은 값을 갖는 객체를 중복 저장하지 않을 수 있다.
     }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

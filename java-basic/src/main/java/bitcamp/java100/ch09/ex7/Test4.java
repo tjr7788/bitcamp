@@ -1,3 +1,4 @@
+// 컬렉션 API - HashSet II
 package bitcamp.java100.ch09.ex7;
 
 import java.util.HashSet;
@@ -6,58 +7,59 @@ public class Test4 {
     
     public static void main(String[] args) {
         
-        HashSet<String> list = new HashSet<>();
+        HashSet<String> set = new HashSet<>();
         
-        
+        // 강조!
+        // => HashSet은 
+        //    - 해시값(hashCode()의 리턴 값)이 같고, 
+        //    - equals()의 리턴 값이 true인 객체를 중복저장하지 않는다.
+        //
         String s1 = "홍길동";
-        String s2 = "홍길동1";
-        String s3 = "홍길동2";
+        String s2 = "임꺽정";
+        String s3 = "유관순";
+        
+        set.add(s1);
+        set.add(s2);
+        set.add(s3);
+        
         String s4 = new String("홍길동");
         String s5 = new String("홍길동");
-        list.add(s2);
-        list.add(s3);
-        System.out.println(s1 == s4);
-        System.out.println(s1 == s5);
         
+        // s1과 s4, s5는 모두 다른 인스턴스이다.
+        System.out.println(s1 == s4); // false
+        System.out.println(s1 == s5); // false
+        System.out.println(s4 == s5); // false
+        
+        // s1, s4, s5의 해시값은 같다.
         System.out.println(s1.hashCode());
         System.out.println(s4.hashCode());
         System.out.println(s5.hashCode());
         
-        System.out.println(s1.equals(s4));
-        System.out.println(s1.equals(s5));
+        // 또한 equals()의 리턴 값도 같다.
+        System.out.println(s1.equals(s4)); // true
+        System.out.println(s1.equals(s5)); // true
+        System.out.println(s4.equals(s5)); // true
         
-        list.add(s4);
-        list.add(s5);
         
-        String[] arr = new String[list.size()];
+        set.add(s4); // s1과 같은 객체로 판단한다. 따라서 저장 안함.
+        set.add(s5); // s1과 같은 객체로 판단한다. 따라서 저장 안함.
         
-        list.toArray(arr);
+        System.out.println(set.size());
         
-        for(String s : arr) {
-            System.out.println(s);
+        String[] arr = new String[set.size()];
+        set.toArray(arr);
+        
+        for (String s : arr) {
+            System.out.printf("%s ", s);
         }
-//        list.add(s1);
-//        list.add(s2);
-//        list.add(s3);
-//        
-//        list.add(s1);   //같은 값은 중복 안된다.
-//        
-//        list.add(null); //null값 가능
-//        
-//        System.out.println(list.size());
-//        
-//        String[] arr = new String[list.size()];
-//        String[] arr2 = list.toArray(arr);
-//        
-//        if (arr == arr2) {
-//            System.out.println("같다");
-//        }
-//        else {
-//            System.out.println("arr != arr2");
-//        }
-//        
-//        for(String s : arr) {  //저장순서대로 꺼내기 가능
-//            System.out.println(s);
-//        }
+        System.out.println();
     }
+
 }
+
+
+
+
+
+
+

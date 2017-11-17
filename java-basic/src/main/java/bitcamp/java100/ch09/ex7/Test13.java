@@ -1,31 +1,29 @@
+// 컬렉션 API - Iterator 
+// => 컬렉션에서 값을 꺼내주는 역할을 하는 객체 
+//
 package bitcamp.java100.ch09.ex7;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 public class Test13 {
+
     public static void main(String[] args) {
         
         ArrayList<String> list = new ArrayList<>();
         
-        String s1 = "홍길동";
-        String s2 = "홍길동1";
-        String s3 = "홍길동2";
+        list.add("홍길동");
+        list.add("임꺽정");
+        list.add("유관순");
         
-        list.add(s1);
-        list.add(s2);
-        list.add(s3);
-        
-        list.add(s1);   //중복 가능
-        
-        list.add(null); //null값 가능
-        
-        System.out.println(list.size());
-        
+        // ArrayList에서 "데이터를 꺼내주는 객체"를 얻는다.
         Iterator<String> iterator = list.iterator();
         
-        while(iterator.hasNext()) {
-            System.out.printf("%s\n", iterator.next());
+        // "데이터를 꺼내주는 객체"를 통해 ArrayList에서 값을 꺼낸다.
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
         }
+        
     }
+
 }

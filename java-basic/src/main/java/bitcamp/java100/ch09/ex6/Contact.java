@@ -4,9 +4,9 @@ public class Contact {
     String name;
     String email;
     String tel;
-
+    
     public Contact() {}
-
+    
     public Contact(String name, String email, String tel) {
         this.name = name;
         this.email = email;

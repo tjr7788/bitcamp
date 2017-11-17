@@ -6,13 +6,16 @@ public class CalculatorB {
     void multiple(int value) {
         this.value *= value;
     }
-    
+
     void divide(int value) {
+        if (value == 0) {
+            System.err.println("0으로 나누면 안됩니다!");
+            return;
+        }
         this.value /= value;
     }
     
-    void reminder(int value) {
+    void remainder(int value) {
         this.value %= value;
     }
-    
 }

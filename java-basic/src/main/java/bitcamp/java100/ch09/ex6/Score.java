@@ -6,5 +6,5 @@ public class Score {
     int eng;
     int math;
     int sum;
-    float avg;
+    float aver;
 }

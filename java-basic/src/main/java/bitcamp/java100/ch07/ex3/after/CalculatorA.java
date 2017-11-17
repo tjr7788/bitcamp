@@ -9,5 +9,4 @@ public class CalculatorA extends Calculator {
         this.result -= value;
     }
     
-    
 }

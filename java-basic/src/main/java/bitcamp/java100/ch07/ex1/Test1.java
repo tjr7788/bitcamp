@@ -1,6 +1,9 @@
+// 상속 사용 전
+//
 package bitcamp.java100.ch07.ex1;
 
 public class Test1 {
+
     public static void main(String[] args) {
         Calculator calc = new Calculator();
         calc.result = 10;
@@ -9,5 +12,7 @@ public class Test1 {
         calc.divide(10);
         
         System.out.println(calc.result);
+        
     }
+
 }

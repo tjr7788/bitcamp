@@ -4,8 +4,12 @@ import java.io.Console;
 
 public class MessageBox {
     static boolean confirm(String message) {
-        Console console = System.console();
+        Console console = System.console(); // 현재 JVM의 콘솔 객체를 리턴한다.
+        
         String response = console.readLine(message).toLowerCase();
-        return (response.equals("y") || response.equals("yes"));
+        if (response.equals("y") || response.equals("yes")) {
+            return true;
+        }
+        return false;
     }
 }

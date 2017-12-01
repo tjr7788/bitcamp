@@ -1,157 +1,106 @@
 package java100.app.control;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.List;
 
-import java100.app.domain.Member;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java100.app.dao.RoomDao;
 import java100.app.domain.Room;
-import java100.app.domain.Score;
-import java100.app.util.Prompts;
+@Component("/room")
+public class RoomController implements Controller {
+    
+    // RoomDao는 인터페이스이다. 
+    // 따라서 RoomDao 인터페이스를 구현한 어떤 클래스라도 주입 받을 수 있다.
+    // 이것이 인터페이스를 사용하는 이유이다.
+    // 상황에 따라 다양한 DAO 구현체를 주입 받을 수 있기 때문이다.
+    // 현재는 App 클래스에서 MySQL DBMS를 사용하는 구현체를 주입해 주지만,
+    // 만약 고객사의 DBMS가 Oracle이라면 
+    @Autowired
+    RoomDao roomDao;
 
-// RoomController는 ArrayList를 상속 받은 서브 클래스이기도 하지만,
-// Controller라는 규칙을 따르는 클래스이기도 하다!
-public class RoomController extends ArrayList<Room> implements Controller {
-
-    /**
-     * 
-     */
-    private static final long serialVersionUID = 1L;
-    Scanner keyScan = new Scanner(System.in);
-    private String dataFilePath;
-    
-    public RoomController(String dataFilePath) {
-        this.dataFilePath = dataFilePath;
-        this.init();
-    }
+    @Override
+    public void destroy() {}
     
     @Override
-    public void destroy() {
-        
-        try (PrintWriter out = new PrintWriter(
-                new BufferedWriter(
-                        new FileWriter(this.dataFilePath)))) {
-            for (Room room : this) {
-                out.println(room.toCSVString());
-            }
-            out.flush();
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-            
-        }
-    }
+    public void init() {}
     
-    // CSV 형식으로 저장된 파일에서 성적 데이터를 읽어 
-    // ArrayList에 보관한다.
+    
     @Override
-    public void init() {
+    public void execute(Request request, Response response) {
+        switch (request.getMenuPath()) {
+        case "/room/list": this.doList(request, response); break;
+        case "/room/add": this.doAdd(request, response); break;
+        case "/room/delete": this.doDelete(request, response); break;
+        default: 
+            response.getWriter().println("해당 명령이 없습니다.");
+        }
+    }
+    
+    private void doList(Request request, Response response) {
+        PrintWriter out = response.getWriter();
+        out.println("[강의실 목록]");
         
-        try (
-                BufferedReader in = new BufferedReader(new FileReader(this.dataFilePath));) {
+        try {
+            List<Room> list = roomDao.selectList();
             
-            String csv = null;
-            while ((csv = in.readLine()) != null) {
-                try {
-                    this.add(new Room(csv));
-                } catch (CSVFormatException e) {
-                    System.err.println("CSV 데이터 형식 오류!");
-                    e.printStackTrace();
-                }
+            for (Room room : list) {
+                out.printf("%d, %s, %s, %d\n", 
+                        room.getNo(),
+                        room.getLocation(),
+                        room.getName(),
+                        room.getCapacity());
             }
             
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace(); // for developer
+            out.println(e.getMessage()); // for user
         }
     }
     
-    
-    // 다음 메서드는 Controller 규칙을 따르기로 했기 때문에,
-    // Controller 선언된 추상 메서드를 오버라이딩 한 것이다.
-    // 만약 추상 메서드를 오버라이딩 하지 않는다면,
-    // 이 클래스는 추상 클래스가 되어야 한다.
-    @Override
-    public void execute() {
-        loop:
-        while (true) {
-            System.out.print("강의실관리> ");
-            String input = keyScan.nextLine();
+    private void doAdd(Request request, Response response) {
+        
+        PrintWriter out = response.getWriter();
+        out.println("[강의실 등록]");
+        
+        try {
+            Room room = new Room();
+            room.setLocation(request.getParameter("location"));
+            room.setName(request.getParameter("name"));
+            room.setCapacity(Integer.parseInt(request.getParameter("capacity")));
             
-            // 명령어를 처리하는 각 코드를 별도의 메서드로 추출한다.
-            switch (input) {
-            case "list": this.doList(); break;
-            case "add": this.doAdd(); break;
-            case "delete": this.doDelete(); break;
-            case "main": break loop;
-            default: 
-                System.out.println("해당 명령이 없습니다.");
-            }
+            roomDao.insert(room);
+            
+            out.println("저장하였습니다.");
+            
+        } catch (Exception e) {
+            e.printStackTrace(); // for developer
+            out.println(e.getMessage()); // for user
         }
-    }
-    
-    private void doList() {
-        System.out.println("[강의실 목록]");
-        
-        Iterator<Room> iterator = this.iterator();
-        while (iterator.hasNext()) {
-            Room room = iterator.next();
-            System.out.printf("%s, %s, %d\n",  
-                room.getLocation(), room.getName(), room.getCapacity());
-        }
-    }
-    
-    private void doAdd() {
-        System.out.println("[강의실 등록]");
-        
-        Room room = new Room();
-        room.setName(Prompts.inputString("강의실 이름? "));
-        
-        if (find(room.getName()) != null) {
-            System.out.println("이미 등록된 강의실입니다.");
-            return;
-        }
-        
-        room.setLocation(Prompts.inputString("지역? "));
-        room.setCapacity(Prompts.inputInt("수용인원? "));
-        
-        this.add(room);
     } 
     
-    private void doDelete() {
-        System.out.println("[강의실 삭제]");
-        String roomName = Prompts.inputString("강의실 이름? ");
+    private void doDelete(Request request, Response response) {
         
-        Room room = find(roomName);
+        PrintWriter out = response.getWriter();
+        out.println("[강의실 삭제]");
         
-        if (room == null) {
-            System.out.printf("'%s' 강의실 정보가 없습니다.\n", roomName);
-            return;
-        }
-        
-        if (Prompts.confirm2("정말 삭제하시겠습니까?(y/N) ")) {
-            this.remove(room);
-            System.out.println("삭제하였습니다.");
-        } else {
-            System.out.println("삭제를 취소하였습니다.");
+        try {
+            
+            int no = Integer.parseInt(request.getParameter("no"));
+            
+            if (roomDao.delete(no) > 0) {
+                out.println("삭제했습니다.");
+            } else {
+                out.printf("'%d'의 강의실 정보가 없습니다.\n", no); 
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace(); // for developer
+            out.println(e.getMessage()); // for user
         }
     }
     
-    private Room find(String roomName) {
-        Iterator<Room> iterator = this.iterator();
-        while (iterator.hasNext()) {
-            Room room = iterator.next();
-            if (room.getName().equals(roomName)) {
-                return room;
-            }
-        }
-        return null;
-    }
 }
 
 

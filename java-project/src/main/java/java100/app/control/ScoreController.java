@@ -1,207 +1,158 @@
 package java100.app.control;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
-import java.util.Scanner;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java100.app.dao.ScoreDao;
 import java100.app.domain.Score;
-import java100.app.util.Prompts;
+@Component("/score")
+public class ScoreController implements Controller {
+    
+    // ScoreDao는 인터페이스이다. 
+    // 따라서 ScoreDao 인터페이스를 구현한 어떤 클래스라도 주입 받을 수 있다.
+    // 이것이 인터페이스를 사용하는 이유이다.
+    // 상황에 따라 다양한 DAO 구현체를 주입 받을 수 있기 때문이다.
+    // 현재는 App 클래스에서 MySQL DBMS를 사용하는 구현체를 주입해 주지만,
+    // 만약 고객사의 DBMS가 Oracle이라면 
+    @Autowired
+    ScoreDao scoreDao;
+    
+    @Override
+    public void destroy() {}
+    
+    @Override
+    public void init() {}
+    
+    @Override
+    public void execute(Request request, Response response) {
 
-public class ScoreController extends GenericController<Score> {
-    
-    private String dataFilePath;
-    
-    public ScoreController(String dataFilePath) {
-        this.dataFilePath = dataFilePath;
-        this.init();
-        
-    }
-    
-    // ArrayList에 보관된 데이터를 score.csv 파일에 저장한다.
-    // 저장하는 형식은 CSV(Comma Separated Value) 방식을 사용한다.
-    // 예) 홍길동,100,100,100,300,100.0
-    @Override
-    public void destroy() {
-        
-        try (PrintWriter out = new PrintWriter(
-                new BufferedWriter(
-                        new FileWriter(this.dataFilePath)))) {
-            for (Score score : this.list) {
-                out.println(score.toCSVString());
-            }
-            out.flush();
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-            
+        switch (request.getMenuPath()) {
+        case "/score/add": this.doAdd(request, response); break;
+        case "/score/list": this.doList(request, response); break;
+        case "/score/view": this.doView(request, response); break;
+        case "/score/update": this.doUpdate(request, response); break;
+        case "/score/delete": this.doDelete(request, response); break;
+        default: 
+            response.getWriter().println("해당 명령이 없습니다.");
         }
     }
     
-    // CSV 형식으로 저장된 파일에서 성적 데이터를 읽어 
-    // ArrayList에 보관한다.
-    @Override
-    public void init() {
+    private void doDelete(Request request, Response response) {
         
-        try (
-                BufferedReader in = new BufferedReader(new FileReader(this.dataFilePath));) {
+        PrintWriter out = response.getWriter();
+        out.println("[성적 삭제]");
+        
+        try {
+            int no = Integer.parseInt(request.getParameter("no"));
             
-            String csv = null;
-            while ((csv = in.readLine()) != null) {
-                try {
-                    list.add(new Score(csv));
-                } catch (CSVFormatException e) {
-                    System.err.println("CSV 데이터 형식 오류!");
-                    e.printStackTrace();
-                }
-            }
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    // 실제 이 클래스가 오버라이딩 하는 메서드는 
-    // GenericController가 따른다고 한 Controller 인터페이스의 
-    // 추상 메서드이다.
-    @Override
-    public void execute() {
-        loop:
-        while (true) {
-            System.out.print("성적관리> ");
-            String input = keyScan.nextLine();
-            
-            // 명령어를 처리하는 각 코드를 별도의 메서드로 추출한다.
-            switch (input) {
-            case "add": this.doAdd(); break;
-            case "list": this.doList(); break;
-            case "view": this.doView(); break;
-            case "update": this.doUpdate(); break;
-            case "delete": this.doDelete(); break;
-            case "main": break loop;
-            default: 
-                System.out.println("해당 명령이 없습니다.");
-            }
-        }
-    }
-    
-    private void doDelete() {
-        System.out.println("[성적 삭제]");
-        // Prompts 클래스의 input() 메서드를 사용한 예:
-        //String name = Prompts.input("이름? ");
-        
-        String name = Prompts.inputString("이름? ");
-        
-        Score score = findByName(name);
-        
-        if (score == null) {
-            System.out.printf("'%s'의 성적 정보가 없습니다.\n", name);
-        } else {
-            if (Prompts.confirm2("정말 삭제하시겠습니까?(y/N) ")) {
-                list.remove(score);
-                System.out.println("삭제하였습니다.");
+            if (scoreDao.delete(no) > 0) {
+                out.println("삭제했습니다.");
             } else {
-                System.out.println("삭제를 취소하였습니다.");
+                out.printf("'%d'의 성적 정보가 없습니다.\n", no);
             }
+            
+        } catch (Exception e) {
+            e.printStackTrace(); // for developer
+            out.println(e.getMessage()); // for user
         }
     }
 
-    private void doUpdate() {
-        System.out.println("[성적 변경]");
-        String name = Prompts.inputString("이름? ");
+    private void doUpdate(Request request, Response response) {
+        PrintWriter out = response.getWriter();
+        out.println("[성적 변경]");
         
-        Score score = findByName(name);
-        
-        if (score == null) {
-            System.out.printf("'%s'의 성적 정보가 없습니다.\n", name);
-        } else {
-            int kor = score.getKor();
-            try {
-                kor = Prompts.inputInt("국어?(%d) ", score.getKor());
-            } catch(Exception e) {}
+        try {
+            Score score = new Score();
+            score.setNo(Integer.parseInt(request.getParameter("no")));
+            score.setName(request.getParameter("name"));
+            score.setKor(Integer.parseInt(request.getParameter("kor")));
+            score.setEng(Integer.parseInt(request.getParameter("eng")));
+            score.setMath(Integer.parseInt(request.getParameter("math")));
             
-            int eng = score.getEng();
-            try {
-                eng = Prompts.inputInt("영어?(%d) ", score.getEng());
-            } catch(Exception e) {}
-            
-            int math = score.getMath();
-            try {
-                math = Prompts.inputInt("수학?(%d) ", score.getMath());
-            } catch(Exception e) {}
-            
-            if (Prompts.confirm2("변경하시겠습니까?(y/N) ")) {
-                score.setKor(kor);
-                score.setEng(eng);
-                score.setMath(math);
-                System.out.println("변경하였습니다.");
-                
+            if(scoreDao.update(score) > 0) {
+                out.println("변경하였습니다.");
             } else {
-                System.out.println("변경을 취소하였습니다.");
+                out.printf("'%s'의 성적 정보가 없습니다.\n", score.getNo());
             }
+            
+        } catch (Exception e) {
+            e.printStackTrace(); // for developer
+            out.println(e.getMessage()); // for user
         }
     }
 
-    private void doView() {
-        System.out.println("[성적 상세 정보]");
-        String name = Prompts.inputString("이름? ");
+    private void doView(Request request, Response response) {
         
-        Score score = findByName(name);
+        PrintWriter out = response.getWriter();
+        out.println("[성적 상세 정보]");
         
-        if (score == null) {
-            System.out.printf("'%s'의 성적 정보가 없습니다.\n", name);
-            return;
-        }
-        
-        System.out.printf("%-4s, %4d, %4d, %4d, %4d, %6.1f\n",  
-                score.getName(),
-                score.getKor(),
-                score.getEng(),
-                score.getMath(),
-                score.getSum(), 
-                score.getAver());
-    }
-
-    private void doList() {
-        System.out.println("[성적 목록]");
-        
-        Iterator<Score> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            Score score = iterator.next();
-            System.out.printf("%-4s, %4d, %6.1f\n",  
-                    score.getName(), 
-                    score.getSum(), 
-                    score.getAver());
+        try {
+            int no = Integer.parseInt(request.getParameter("no"));
+            Score score = scoreDao.selectOne(no);
+            
+            if (score != null) {
+                out.printf("번호: %d\n", score.getNo());
+                out.printf("이름: %s\n", score.getName());
+                out.printf("국어: %d\n", score.getKor());
+                out.printf("영어: %d\n", score.getEng());
+                out.printf("수학: %d\n", score.getMath());
+                out.printf("합계: %d\n", score.getSum());
+                out.printf("평균: %.1f\n", score.getAver());
+            } else {
+                out.printf("'%d'의 성적 정보가 없습니다.\n", no); 
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace(); // for developer
+            out.println(e.getMessage()); // for user
         }
     }
 
-    private void doAdd() {
-        System.out.println("[성적 등록]");
+    private void doList(Request request, Response response) {
+        PrintWriter out = response.getWriter();
+        out.println("[성적 목록]");
         
-        Score score = new Score();
+        try {
+            List<Score> list = scoreDao.selectList();
+            
+            for (Score score : list) {
+                out.printf("%4d, %-4s, %4d, %6.1f\n",
+                        score.getNo(),
+                        score.getName(), 
+                        score.getSum(), 
+                        score.getAver());
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace(); // for developer
+            out.println(e.getMessage()); // for user
+        }
+    }
+
+    private void doAdd(Request request, Response response) {
         
-        score.setName(Prompts.inputString("이름? "));
-        score.setKor(Prompts.inputInt("국어? "));
-        score.setEng(Prompts.inputInt("영어? "));
-        score.setMath(Prompts.inputInt("수학? "));
+        PrintWriter out = response.getWriter();
+        out.println("[성적 등록]");
         
-        list.add(score);
+        try {
+            Score score = new Score();
+            score.setName(request.getParameter("name"));
+            score.setKor(Integer.parseInt(request.getParameter("kor")));
+            score.setEng(Integer.parseInt(request.getParameter("eng")));
+            score.setMath(Integer.parseInt(request.getParameter("math")));
+            
+            scoreDao.insert(score);
+            out.println("저장하였습니다.");
+            
+        } catch (Exception e) {
+            e.printStackTrace(); // for developer
+            out.println(e.getMessage()); // for user
+        }
     }
     
-    private Score findByName(String name) {
-        Iterator<Score> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            Score score = iterator.next();
-            if (score.getName().equals(name)) {
-                return score;
-            }
-        }
-        return null;
-    }
 }
 
 

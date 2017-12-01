@@ -1,191 +1,158 @@
 package java100.app.control;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Iterator;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java100.app.dao.MemberDao;
 import java100.app.domain.Member;
-import java100.app.util.Prompts;
+@Component("/member")
+public class MemberController implements Controller {
+    
+    // MemberDao는 인터페이스이다. 
+    // 따라서 MemberDao 인터페이스를 구현한 어떤 클래스라도 주입 받을 수 있다.
+    // 이것이 인터페이스를 사용하는 이유이다.
+    // 상황에 따라 다양한 DAO 구현체를 주입 받을 수 있기 때문이다.
+    // 현재는 App 클래스에서 MySQL DBMS를 사용하는 구현체를 주입해 주지만,
+    // 만약 고객사의 DBMS가 Oracle이라면 
+    // 그 Oracle을 사용하는 DAO를 주입해줄 것이다. 
+    @Autowired
+    MemberDao memberDao;
 
-public class MemberController extends GenericController<Member> {
-    
-    private String dataFilePath;
-    
-    public MemberController(String dataFilePath) {
-        this.dataFilePath = dataFilePath;
-        this.init();
-    }
+    @Override
+    public void destroy() {}
     
     @Override
-    public void destroy() {
-        
-        try (PrintWriter out = new PrintWriter(
-                new BufferedWriter(
-                        new FileWriter(this.dataFilePath)))) {
-            for (Member member : this.list) {
-                out.println(member.toCSVString());
-            }
-            out.flush();
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-            
-        }
-    }
+    public void init() {}
     
-    @Override
-    public void init() {
-        
-        try (
-                BufferedReader in = new BufferedReader(new FileReader(this.dataFilePath));) {
-            
-            String csv = null;
-            while ((csv = in.readLine()) != null) {
-                try {
-                    list.add(new Member(csv));
-                } catch (CSVFormatException e) {
-                    System.err.println("CSV 데이터 형식 오류!");
-                    e.printStackTrace();
-                }
-            }
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    // 실제 이 클래스가 오버라이딩 하는 메서드는 
-    // GenericController가 따른다고 한 Controller 인터페이스의 
-    // 추상 메서드이다.
     @Override    
-    public void execute() {
-        loop:
-        while (true) {
-            System.out.print("회원관리> ");
-            String input = keyScan.nextLine();
+    public void execute(Request request, Response response) {
+        switch (request.getMenuPath()) {
+        case "/member/list": this.doList(request, response); break;
+        case "/member/add": this.doAdd(request, response); break;
+        case "/member/view": this.doView(request, response); break;
+        case "/member/update": this.doUpdate(request, response); break;
+        case "/member/delete": this.doDelete(request, response); break;
+        default: 
+            response.getWriter().println("해당 명령이 없습니다.");
+        }
+    }
+    
+    private void doList(Request request, Response response) {
+
+        PrintWriter out = response.getWriter();
+        out.println("[회원 목록]");
+        
+        try {
             
-            // 명령어를 처리하는 각 코드를 별도의 메서드로 추출한다.
-            switch (input) {
-            case "list": this.doList(); break;
-            case "add": this.doAdd(); break;
-            case "view": this.doView(); break;
-            case "update": this.doUpdate(); break;
-            case "delete": this.doDelete(); break;
-            case "main": break loop;
-            default: 
-                System.out.println("해당 명령이 없습니다.");
+            List<Member> list = memberDao.selectList();
+            
+            for (Member member : list) {
+                out.printf("%d, %s, %s, %s\n",
+                        member.getNo(),
+                        member.getName(), 
+                        member.getEmail(),
+                        member.getCreatedDate());
             }
+            
+        } catch (Exception e) {
+            e.printStackTrace(); // for developer
+            out.println(e.getMessage()); // for user
         }
     }
     
-    private void doList() {
-        System.out.println("[회원 목록]");
+    private void doAdd(Request request, Response response) {
+
+        PrintWriter out = response.getWriter();
+        out.println("[회원 등록]");
         
-        Iterator<Member> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            Member member = iterator.next();
-            System.out.printf("%-4s, %s\n",  
-                    member.getName(), 
-                    member.getEmail());
+        try {
+            
+            Member member = new Member();
+            member.setName(request.getParameter("name"));
+            member.setEmail(request.getParameter("email"));
+            member.setPassword(request.getParameter("password"));
+            
+            memberDao.insert(member);
+            
+            out.println("저장하였습니다.");
+            
+        } catch (Exception e) {
+            e.printStackTrace(); // for developer
+            out.println(e.getMessage()); // for user
         }
-    }
-    
-    private void doAdd() {
-        System.out.println("[회원 등록]");
-        
-        Member member = new Member();
-        member.setEmail(Prompts.inputString("이메일? "));
-        
-        if (findByEmail(member.getEmail()) != null) {
-            System.out.println("이미 등록된 이메일입니다.");
-            return;
-        }
-        
-        member.setName(Prompts.inputString("이름? "));
-        member.setPassword(Prompts.inputString("암호? "));
-        
-        list.add(member);
     } 
     
-    private void doView() {
-        System.out.println("[회원 상세 정보]");
-        String email = Prompts.inputString("이메일? ");
+    private void doView(Request request, Response response) {
+
+        PrintWriter out = response.getWriter();
+        out.println("[회원 상세 정보]");
         
-        Member member = findByEmail(email);
-        
-        if (member == null) {
-            System.out.printf("'%s'의 회원 정보가 없습니다.\n", email);
-            return;
+        try {
+            
+            int no = Integer.parseInt(request.getParameter("no"));
+            Member member = memberDao.selectOne(no);
+            
+            if (member != null) {
+                out.printf("번호: %d\n", member.getNo());
+                out.printf("이름: %s\n", member.getName());
+                out.printf("이메일: %s\n", member.getEmail());
+                out.printf("등록일: %s\n", member.getCreatedDate());
+            } else {
+                out.printf("'%d'번의 회원 정보가 없습니다.\n", no); 
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace(); // for developer
+            out.println(e.getMessage()); // for user
         }
-        
-        System.out.printf("이름: %s\n", member.getName());
-        System.out.printf("이메일: %s\n", member.getEmail());
-        System.out.printf("암호: %s\n", member.getPassword());
     } 
     
-    private void doUpdate() {
-        System.out.println("[회원 변경]");
-        String email = Prompts.inputString("이메일? ");
+    private void doUpdate(Request request, Response response) {
+
+        PrintWriter out = response.getWriter();
+        out.println("[회원 변경]");
         
-        Member member = findByEmail(email);
-        
-        if (member == null) {
-            System.out.printf("'%s'의 회원 정보가 없습니다.\n", email);
-            return;
-        }
-        
-        String name = Prompts.inputString("이름?(%s) ", member.getName());
-        if (name.isEmpty()) {
-            name = member.getName();
-        }
-        
-        String password = Prompts.inputString("암호? ");
-        if (password.isEmpty()) {
-            password = member.getPassword();
-        }
-        
-        if (Prompts.confirm2("변경하시겠습니까?(y/N) ")) {
-            member.setName(name);
-            member.setPassword(password);
-            System.out.println("변경하였습니다.");
+        try {
+            Member member = new Member();
+            member.setNo(Integer.parseInt(request.getParameter("no")));
+            member.setName(request.getParameter("name"));
+            member.setEmail(request.getParameter("email"));
+            member.setPassword(request.getParameter("password"));
             
-        } else {
-            System.out.println("변경을 취소하였습니다.");
-        }
-    }
-    
-    private void doDelete() {
-        System.out.println("[회원 삭제]");
-        String email = Prompts.inputString("이메일? ");
-        
-        Member member = findByEmail(email);
-        
-        if (member == null) {
-            System.out.printf("'%s'의 회원 정보가 없습니다.\n", email);
-            return;
-        }
-        
-        if (Prompts.confirm2("정말 삭제하시겠습니까?(y/N) ")) {
-            list.remove(member);
-            System.out.println("삭제하였습니다.");
-        } else {
-            System.out.println("삭제를 취소하였습니다.");
-        }
-    }
-    
-    private Member findByEmail(String email) {
-        Iterator<Member> iterator = list.iterator();
-        while (iterator.hasNext()) {
-            Member member = iterator.next();
-            if (member.getEmail().equals(email)) {
-                return member;
+            if (memberDao.update(member) > 0) {
+                out.println("변경하였습니다.");
+            } else {
+                out.printf("'%d'번 회원의 정보가 없습니다.\n", member.getNo()); 
             }
+            
+        } catch (Exception e) {
+            e.printStackTrace(); // for developer
+            out.println(e.getMessage()); // for user
         }
-        return null;
+    }
+    
+    private void doDelete(Request request, Response response) {
+
+        PrintWriter out = response.getWriter();
+        out.println("[회원 삭제]");
+        
+        try {
+            
+            int no = Integer.parseInt(request.getParameter("no"));
+            
+            if (memberDao.delete(no) > 0) {
+                out.println("삭제했습니다.");
+            } else {
+                out.printf("'%d'번의 회원 정보가 없습니다.\n", no); 
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace(); // for developer
+            out.println(e.getMessage()); // for user
+        }
     }
 }
 

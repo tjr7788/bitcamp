@@ -5,9 +5,11 @@ public class Car {
     private String color;
     private int capacity;
     private Engine engine;
+    
     public Car() {
         System.out.println("Car()");
     }
+    
     public String getModel() {
         return model;
     }
@@ -27,13 +29,15 @@ public class Car {
     }
     public void setCapacity(int capacity) {
         this.capacity = capacity;
-        System.out.println("setCapacity");
+        System.out.println("setCapacity()");
     }
     public Engine getEngine() {
         return engine;
     }
     public void setEngine(Engine engine) {
         this.engine = engine;
-        System.out.println("setEngine");
+        System.out.println("setEngine()");
     }
+    
+    
 }

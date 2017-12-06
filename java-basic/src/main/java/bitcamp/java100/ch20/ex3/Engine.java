@@ -2,31 +2,34 @@ package bitcamp.java100.ch20.ex3;
 
 public class Engine {
     private String name;
-    private int value;
+    private int valve;
     private int cc;
     
     public Engine() {
-        System.out.println("Engine()생성자 호출");
+        System.out.println("Engine()");
     }
+    
     public String getName() {
         return name;
     }
     public void setName(String name) {
         this.name = name;
-        System.out.println("setName");
+        System.out.println("setName()");
     }
-    public int getValue() {
-        return value;
+    public int getValve() {
+        return valve;
     }
-    public void setValue(int value) {
-        this.value = value;
-        System.out.println("setValue");
+    public void setValve(int valve) {
+        this.valve = valve;
+        System.out.println("setValve()");
     }
     public int getCc() {
         return cc;
     }
     public void setCc(int cc) {
         this.cc = cc;
-        System.out.println("setCc");
+        System.out.println("setCc()");
     }
+    
+    
 }

@@ -10,9 +10,8 @@ public class AppConfig {
         return new String();
     }
     
-    
     @Bean("str2")
     String getString2() {
-        return new String("hello");
+        return new String("Hello");
     }
 }

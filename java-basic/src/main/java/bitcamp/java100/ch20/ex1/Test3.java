@@ -17,7 +17,7 @@ public class Test3 {
         for (String name : names) {
             System.out.printf("%s\n --------->%s\n",name, appCtx.getBean(name).getClass().getName());
         }
-        System.out.println("---------------------");
+        System.out.println("--------------------");
         
         String s1 = (String)appCtx.getBean("str1");
         String s2 = (String)appCtx.getBean("str2");

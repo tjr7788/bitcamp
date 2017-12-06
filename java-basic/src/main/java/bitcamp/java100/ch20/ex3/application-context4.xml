@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:c="http://www.springframework.org/schema/c"
+    xmlns:p="http://www.springframework.org/schema/p"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
-        
-    <bean class="bitcamp.java100.ch20.ex2.MyClass"/>
-    
-    
-    <bean class="bitcamp.java100.ch20.ex2.MyClass" c:name="홍길동" c:age="100"/>
-    
-    <bean class="bitcamp.java100.ch20.ex2.MyClass" 
-    c:_1="20" c:_0="홍길동" c:_2="true"/>
-    
-    <bean class="bitcamp.java100.ch20.ex2.MyClass3">
-        <constructor-arg type="String"><value>홍길동</value></constructor-arg>
-    </bean>
-    <bean class="bitcamp.java100.ch20.ex2.MyClass3">
-        <constructor-arg type="float"><value>1.5</value></constructor-arg>
-        <constructor-arg type="float"><value>1.2</value></constructor-arg>
-    </bean>
-    <bean id="obj1" class="bitcamp.java100.ch20.ex2.MyClass"/>
-    <bean class="bitcamp.java100.ch20.ex2.MyClass3" c:myClass-ref="obj1"/>
-    
 
+    <!-- 셋터 호출 III - 레퍼런스 프로퍼티 -->
+          
+    <!-- <ref> 태그를 사용하여 셋터에게 객체를 넘기기 -->
+    <bean id="c1" class="bitcamp.java100.ch20.ex3.Car">
+        <property name="engine"><ref bean="e1"/></property>
+    </bean>
+
+    <bean id="e1" class="bitcamp.java100.ch20.ex3.Engine"
+          p:name="비트엔진" p:cc="5000" p:valve="16"/>
 </beans>
+
+
+
+
+
+
+

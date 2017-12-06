@@ -3,11 +3,13 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
-
-    <bean id="str1" class="java.lang.String"/>
-
-    <bean id="str2" class="java.lang.String">
-        <constructor-arg type = "java.lang.String" value = "Hello!"/>
+        
+        
+        
+        
+    <bean class="bitcamp.java100.ch20.ex2.MyClass"/>
+    
+    <bean class="bitcamp.java100.ch20.ex2.MyClass">
+        <constructor-arg><value>100</value></constructor-arg>
     </bean>
-
 </beans>

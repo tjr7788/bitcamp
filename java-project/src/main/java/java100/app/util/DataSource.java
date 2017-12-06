@@ -25,13 +25,6 @@ public class DataSource {
         }
         
         Class.forName(this.driverClassName);
-        // => com.mysql.jdbc.Driver 클래스를 로딩한다.
-        //    단 한 번 로딩된 클래스는 다시 로딩하지 않는다.
-        // => Driver 클래스 내부에 선언된 static {} 블록을 수행한다.
-        //    => Driver 인스턴스를 생성한다.
-        //    => DriverManager에 그 인스턴스를 등록한다.
-        
-        // 없다면 새로 만들어 빌려준다.
         return DriverManager.getConnection(
                 this.url, this.username, this.password);
     }
@@ -43,6 +36,14 @@ public class DataSource {
             list.add(con);
             
         } catch (Exception e) {}
+    }
+    
+    synchronized public void close() {
+        for (Connection con : list) {
+            try {
+                con.close();
+            } catch (Exception e) {}
+        }
     }
 
     public String getDriverClassName() {

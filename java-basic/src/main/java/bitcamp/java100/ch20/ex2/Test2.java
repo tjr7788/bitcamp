@@ -8,7 +8,7 @@ public class Test2 {
         
         ClassPathXmlApplicationContext appCtx =
                 new ClassPathXmlApplicationContext(
-                        "bitcamp/java100/ch20/ex2/application-context4.xml");
+                        "bitcamp/java100/ch20/ex2/application-context2.xml");
         
     }
 }

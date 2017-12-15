@@ -5,6 +5,7 @@ import java.net.Socket;
 import java.sql.Date;
 
 public class Y {
+
     private File f1;
     Date f2;
     protected StringBuffer f3;
@@ -15,5 +16,4 @@ public class Y {
     void a2(int p1) {}
     protected void a3(int p1, String p2) {}
     public void a4(int[] p1) {}
-    
 }

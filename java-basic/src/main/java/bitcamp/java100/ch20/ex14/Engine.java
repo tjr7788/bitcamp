@@ -2,18 +2,17 @@ package bitcamp.java100.ch20.ex14;
 
 import org.springframework.stereotype.Component;
 
-@Component("비트엔진")
+@Component
 public class Engine {
-    @Override
-    public String toString() {
-        return "Engine [name=" + name + ", valve=" + valve + ", cc=" + cc + "]";
-    }
     private String name;
     private int valve;
     private int cc;
     
     public Engine() {
+        System.out.println("Engine()");
     }
+    
+    
     public String getName() {
         return name;
     }
@@ -32,6 +31,13 @@ public class Engine {
     public void setCc(int cc) {
         this.cc = cc;
     }
+
+
+    @Override
+    public String toString() {
+        return "Engine [name=" + name + ", valve=" + valve + ", cc=" + cc + "]";
+    }
+
     
     
 }

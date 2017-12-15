@@ -8,32 +8,26 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 
-
-
 @WebServlet(urlPatterns="/hello")
 public class HelloServlet implements Servlet {
     ServletConfig config;
     
+    @Override 
+    public void init(ServletConfig config) throws ServletException {
+        this.config = config;
+    }
     
-    @Override
-    public void destroy() {};
+    @Override 
+    public void destroy() {}
     
     @Override
     public ServletConfig getServletConfig() {
-        
         return this.config;
     }
     
     @Override
     public String getServletInfo() {
-        // TODO Auto-generated method stub
         return "Hello Servlet";
-    }
-    
-    @Override 
-    public void init(ServletConfig config) throws ServletException {
-        this.config = config;
-        
     }
     
     @Override
@@ -41,7 +35,14 @@ public class HelloServlet implements Servlet {
         res.setContentType("text/plain;charset=UTF-8");
         PrintWriter out = res.getWriter();
         out.println("안녕하세요!");
-        
-        
     }
 }
+
+
+
+
+
+
+
+
+

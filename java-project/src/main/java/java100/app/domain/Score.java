@@ -1,6 +1,6 @@
 package java100.app.domain;
 
-public class Score {  
+public class Score {
     
     protected int no;
     protected String name;
@@ -10,28 +10,31 @@ public class Score {
     protected int sum;
     protected float aver;
 
-    public Score() {}
-    
+    //: ### 생성자 
+
+    public Score(){}
+
     public Score(int no, String name, int kor, int eng, int math) {
         this.no = no;
         this.name = name;
         this.kor = kor;
         this.eng = eng;
         this.math = math;
-        
         this.compute();
+
     }
+
     
     @Override
     public String toString() {
-        return "Score [no=" + no + ", name=" + name + ", kor=" + kor + ", eng=" + eng + ", math=" + math + ", sum="
-                + sum + ", aver=" + aver + "]";
+        return "Score [no=" + no + ", name=" + name + ", kor=" + kor + ", eng=" + eng + ", math=" + math + ", "
+                + "sum=" + sum + ", aver=" + aver + "]";
     }
 
     public int getNo() {
         return no;
     }
-
+    
     public void setNo(int no) {
         this.no = no;
     }
@@ -79,9 +82,18 @@ public class Score {
         return aver;
     }
 
+
+
+
+
     private void compute() {
         this.sum = this.kor + this.eng + this.math;
-        this.aver = this.sum / 3f;
+        this.aver = (float)this.sum / 3f;
     }
-    
+
+
+    //: ### 인스턴스 메서드
+    //: 인스턴스 데이터를 다루는 메서드는 스태틱 보다 인스턴스 메서드로 선언해야 한다W.
+
+
 }

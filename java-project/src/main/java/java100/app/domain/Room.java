@@ -5,20 +5,22 @@ public class Room {
     protected String location;
     protected String name;
     protected int capacity;
-    
+
     public Room() {}
-    
+
     public Room(int no, String location, String name, int capacity) {
         this.no = no;
         this.location = location;
         this.name = name;
         this.capacity = capacity;
     }
-    
+
+
     @Override
     public String toString() {
         return "Room [no=" + no + ", location=" + location + ", name=" + name + ", capacity=" + capacity + "]";
     }
+    
 
     public int getNo() {
         return no;
@@ -51,6 +53,6 @@ public class Room {
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
-    
-    
+
+
 }

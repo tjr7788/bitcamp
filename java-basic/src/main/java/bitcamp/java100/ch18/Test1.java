@@ -3,13 +3,12 @@ package bitcamp.java100.ch18;
 import java.io.StringWriter;
 
 public class Test1 {
+
     public static void main(String[] args) throws Exception {
         
         Class<?> c1 = Class.forName("java.io.BufferedReader");
         
-        
         Class<?> c2 = java.io.BufferedWriter.class;
-        
         
         StringWriter in = new StringWriter();
         

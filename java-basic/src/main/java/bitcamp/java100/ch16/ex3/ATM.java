@@ -1,7 +1,7 @@
 package bitcamp.java100.ch16.ex3;
 
 public class ATM extends Thread {
-    
+
     Account account;
     
     public ATM(String name, Account account) {
@@ -13,13 +13,13 @@ public class ATM extends Thread {
     public void run() {
         long sum = 0;
         
-        while(true) {
+        while (true) {
             long money = account.withdraw(100);
-            if (money == 0) break;
-            
+            if (money == 0)
+                break;
             sum += money;
         }
         
-        System.out.printf("%s = %d 원\n", this.getName(), sum);
+        System.out.printf("%s = %d원\n", this.getName(), sum);
     }
 }

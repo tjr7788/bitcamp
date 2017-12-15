@@ -4,10 +4,14 @@ import java.beans.PropertyEditorSupport;
 import java.sql.Date;
 
 public class MyDateEditor extends PropertyEditorSupport{
-    
+
     @Override
     public void setAsText(String text) throws IllegalArgumentException {
-        // TODO Auto-generated method stub
+        
         this.setValue(Date.valueOf(text));
+        
     }
+    
+    
+
 }

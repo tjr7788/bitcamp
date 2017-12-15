@@ -1,6 +1,7 @@
 package bitcamp.java100.ch20.ex4;
 
 public class Tire {
+
     String maker;
     String model;
     int width;
@@ -11,12 +12,6 @@ public class Tire {
         System.out.println("Tire()");
     }
     
-    
-    @Override
-    public String toString() {
-        return "Tire [maker=" + maker + ", model=" + model + ", width=" + width + ", ratio=" + ratio + ", inch=" + inch
-                + "]";
-    }
     public String getMaker() {
         return maker;
     }
@@ -47,4 +42,11 @@ public class Tire {
     public void setInch(int inch) {
         this.inch = inch;
     }
+    
+    @Override
+    public String toString() {
+        return "Tire [maker=" + maker + ", model=" + model + ", width=" + width + ", ratio=" + ratio + ", inch=" + inch
+                + "]";
+    }
+    
 }

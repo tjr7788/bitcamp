@@ -2,16 +2,15 @@ package bitcamp.java100.ch20.ex6;
 
 public class CD {
     private String title;
-    private String singer;
+    private String Singer;
     
     public CD() {
         System.out.println("CD()");
     }
 
-    public CD(String title, String singer) {
-        super();
-        this.title = title;
-        this.singer = singer;
+    @Override
+    public String toString() {
+        return "CD [title=" + title + ", Singer=" + Singer + "]";
     }
 
     public String getTitle() {
@@ -23,11 +22,11 @@ public class CD {
     }
 
     public String getSinger() {
-        return singer;
+        return Singer;
     }
 
     public void setSinger(String singer) {
-        this.singer = singer;
+        Singer = singer;
     }
     
     

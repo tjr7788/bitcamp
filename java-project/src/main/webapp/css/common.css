@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+footer {
+    text-align: center;
+    background-color: black;
+    color: white;
+}
+.container {
+    width: 680px;
+}

@@ -1,4 +1,3 @@
-// 인터페이스 구현
 package bitcamp.java100.ch12.ex4;
 
 public class A implements Protocol {
@@ -13,4 +12,5 @@ public class A implements Protocol {
         System.out.println("m2()");
     }
 
+    
 }

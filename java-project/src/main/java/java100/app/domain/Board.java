@@ -9,12 +9,24 @@ public class Board {
     protected Date regDate;
     protected int viewCount;
     
+    public Board() {}
+    
+
     @Override
     public String toString() {
         return "Board [no=" + no + ", title=" + title + ", content=" + content + ", regDate=" + regDate + ", viewCount="
                 + viewCount + "]";
     }
 
+    public String toCSVString() {
+        return String.format("%d,%s,%s,%s,%d", 
+                this.getNo(), 
+                this.getTitle(),
+                this.getContent(),
+                this.getRegDate().toString(),
+                this.getViewCount());
+    }
+    
     public int getNo() {
         return no;
     }
@@ -55,14 +67,8 @@ public class Board {
         this.viewCount = viewCount;
     }
     
+   
+   
+    
 }
-
-
-
-
-
-
-
-
-
 

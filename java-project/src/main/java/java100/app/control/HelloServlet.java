@@ -3,70 +3,71 @@ package java100.app.control;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import java100.app.AppInitServlet;
-import java100.app.dao.ScoreDao;
+@SuppressWarnings("serial")
 @WebServlet(urlPatterns="/hello/*")
-public class HelloServlet implements Servlet {
-    
-    ServletConfig servletConfig;
+public class HelloServlet extends HttpServlet {
     
     @Override
-    public void destroy() {}
-    
-    @Override
-    public ServletConfig getServletConfig() {
-        // TODO Auto-generated method stub
-        return this.servletConfig;
-    }
-    @Override
-    public String getServletInfo() {
-        return "안녕 서블릿";
-    }
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        this.servletConfig = config;
-    }
-    @Override
-    public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException{
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
-        httpResponse.setContentType("text/plain;charset=UTF-8");
-        switch (httpRequest.getPathInfo()) {
-        case "/hi": this.doHi(httpRequest, httpResponse); break;
-        case "/hi2": this.doHi2(httpRequest, httpResponse); break;
-        default: 
-            response.getWriter().println("해당 명령이 없습니다.");
-        }
-    }
-    
-    private void doHi(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
-        out.println("하이루~~~");
-    }
-    
-    private void doHi2(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void service(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException {
+
+        response.setContentType("text/html;charset=UTF-8");
         
+        switch (request.getPathInfo()) {
+        case "/hi": this.doHi(request, response); break;
+        case "/hi2": this.doHi2(request, response); break;
+        default:
+            this.doError(request, response);
+        }   
+    }
+
+
+    private void doError(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         PrintWriter out = response.getWriter();
-        out.println("오호라... 안녕!");
-        
-    } 
+        out.println("<!DOCTYPE html>");
+        out.println("<html>");
+        out.println("<head>");
+        out.println("</head>");
+        out.println("<body>");
+        out.println("<h1>요청 오류!</h1>");
+        out.println("<p>요청하신 URL의 서비스를 찾을수 없습니다.</p>");
+        out.println("</body>");
+        out.println("</html>");
+    }
+
+
+    private void doHi(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        PrintWriter out = response.getWriter();
+        out.println("<!DOCTYPE html>");
+        out.println("<html>");
+        out.println("<head>");
+        out.println("</head>");
+        out.println("<body>");
+        out.println("<h1>Hi~~</h1>");
+        out.println("</body>");
+        out.println("</html>");
+    }
+
+    private void doHi2(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        PrintWriter out = response.getWriter();
+        out.println("<!DOCTYPE html>");
+        out.println("<html>");
+        out.println("<head>");
+        out.println("</head>");
+        out.println("<body>");
+        out.println("<h1>Hi2~~</h1>");
+        out.println("</body>");
+        out.println("</html>");
+    }
+
+
 }
-
-
-
-
-
-
-
-
-
-

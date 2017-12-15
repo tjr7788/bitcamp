@@ -5,17 +5,20 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Sender {
+
     public static void main(String[] args) throws Exception {
         
-        Scanner sc = new Scanner(System.in);
-        
-        Socket socket = new Socket("192.168.0.58", 9999);
+        Scanner keyboard = new Scanner(System.in);
+        Socket socket = new Socket("localhost",9999);
         
         PrintStream out = new PrintStream(socket.getOutputStream());
         out.println("sender");
+        
         while(true) {
-            System.out.print("입력");
-            out.println(sc.nextLine());
+            
+            System.out.print("입력: ");
+            out.println(keyboard.nextLine());
         }
+        
     }
 }

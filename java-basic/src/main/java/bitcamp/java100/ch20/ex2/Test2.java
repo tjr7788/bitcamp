@@ -3,12 +3,12 @@ package bitcamp.java100.ch20.ex2;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Test2 {
+
     public static void main(String[] args) {
-        
-        
-        ClassPathXmlApplicationContext appCtx =
+
+        ClassPathXmlApplicationContext appCtx = 
                 new ClassPathXmlApplicationContext(
-                        "bitcamp/java100/ch20/ex2/application-context2.xml");
-        
+                        "bitcamp/java100/ch20/ex2/application_context2.xml");
     }
+
 }

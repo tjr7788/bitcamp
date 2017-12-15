@@ -8,6 +8,8 @@ public class Engine {
     public Engine() {
         System.out.println("Engine()");
     }
+    
+    
     public String getName() {
         return name;
     }
@@ -29,6 +31,13 @@ public class Engine {
         this.cc = cc;
         System.out.println("setCc()");
     }
+
+
+    @Override
+    public String toString() {
+        return "Engine [name=" + name + ", valve=" + valve + ", cc=" + cc + "]";
+    }
+
     
     
 }

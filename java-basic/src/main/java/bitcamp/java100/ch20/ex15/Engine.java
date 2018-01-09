@@ -2,7 +2,6 @@ package bitcamp.java100.ch20.ex15;
 
 import org.springframework.stereotype.Component;
 
-@Component("bitengine")
 public class Engine {
     private String name;
     private int valve;

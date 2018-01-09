@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+encoding//src/main/java/java100/app/service/BoardService.java=UTF-8
+encoding//src/main/java/java100/app/service/impl/BoardServiceImpl.java=UTF-8
+encoding//src/main/java/java100/app/util/DataSource.java=UTF-8
+encoding//src/main/java/java100/app/web/BoardController.java=UTF-8
+encoding//src/main/java/java100/app/web/listener/AppInitListener.java=UTF-8

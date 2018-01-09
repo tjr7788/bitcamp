@@ -12,7 +12,6 @@ public class Car {
     private String model;
     private String color;
     private int capacity;
-    
     @Autowired
     private Engine engine;
     

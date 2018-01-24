@@ -1,0 +1,212 @@
+강의실 데이터 준비
+
+insert into room(rno, loc, name, qnty) values(1,'강남','501',30);
+insert into room(rno, loc, name, qnty) values(2,'강남','502',30);
+insert into room(rno, loc, name, qnty) values(3,'강남','503',30);
+insert into room(rno, loc, name, qnty) values(4,'종로','301',30);
+insert into room(rno, loc, name, qnty) values(5,'종로','302',30);
+insert into room(rno, loc, name, qnty) values(6,'종로','303',30);
+insert into room(rno, loc, name, qnty) values(7,'서초','301',30);
+insert into room(rno, loc, name, qnty) values(8,'서초','302',30);
+insert into room(rno, loc, name, qnty) values(9,'서초','501',30);
+insert into room(rno, loc, name, qnty) values(10,'서초','601',30);
+
+- 중복되는건 한개빼고 나머지생략 
+select all loc from room;	// 지역만 다 가져와라 
+select loc from room;		// all은 생략가능함
+select distinct loc from room;	// 중복되는 값만 가져와
+select distinct loc, name from room;	// 해당되는것이 같아야 중복되는것이기때문에 전체가 다나오게된다.
+
+
+
+select rno, loc, name from room order by name asc;	//이름을 오른차순, asc는 생략가능
+select rno, loc, name from room order by name desc;	//이름을 내림차순
+
+select rno, loc, name from room order by name asc, loc asc;	//이름을 먼저 정렬후, 이름이 같은경우 지점명으로 정렬한다.
+select rno, loc, name from room order by name asc, loc desc;
+select rno, loc, name from room order by loc asc, name asc;
+
+
+select rno as room_no, loc as location, name from room order by loc asc, name asc;	//라벨 붙이기
+select rno room_no, loc location, name from room order by loc asc, name asc;	//라벨 붙이기 as 생략가능
+select rno 'room no', loc location, name from room order by loc asc, name asc;	//라벨명에 공백을 넣고싶은땐 ''안에 넣어줘야한다.
+
+
+select concat(name,'(',loc,')') from room;	//ex) 강의실명(지점명), 컬럼명이 이상하게나옴
+select concat(name,'(',loc,')') title from room;	// 별명사용
+
+select count(*) from room;	//갯수
+
+select count(*) cnt from room;
+
+
+insert into memb(mno, name, tel, email, pwd) values(100,'s100','111-1111','s100@',password('1111'));
+insert into memb(mno, name, tel, email, pwd) values(101,'s101','111-1111','s101@',password('1111'));
+insert into memb(mno, name, tel, email, pwd) values(102,'s102','111-1111','s102@',password('1111'));
+insert into memb(mno, name, tel, email, pwd) values(103,'s103','111-1111','s103@',password('1111'));
+insert into memb(mno, name, tel, email, pwd) values(104,'s104','111-1111','s104@',password('1111'));
+
+insert into stnt(mno, work, acc_no, bank) values(100,'N','1000','비트은행');
+insert into stnt(mno, work, acc_no, bank) values(101,'Y','1001','비트은행');
+insert into stnt(mno, work, acc_no, bank) values(102,'N','1002','캠프은행');
+insert into stnt(mno, work, acc_no, bank) values(103,'Y','1003','우리은행');
+insert into stnt(mno, work, acc_no, bank) values(104,'N','1004','국민은행');
+
+
+insert into memb(mno, name, tel, email, pwd) values(200,'s200','111-1111','s200@',password('1111'));
+insert into memb(mno, name, tel, email, pwd) values(201,'s201','111-1111','s201@',password('1111'));
+insert into memb(mno, name, tel, email, pwd) values(202,'s202','111-1111','s202@',password('1111'));
+insert into memb(mno, name, tel, email, pwd) values(203,'s203','111-1111','s203@',password('1111'));
+insert into memb(mno, name, tel, email, pwd) values(204,'s204','111-1111','s204@',password('1111'));
+
+
+insert into tcher(mno, hr_pay, acc_no, bank) values(200,10000,'2000','신한은행');
+insert into tcher(mno, hr_pay, acc_no, bank) values(201,20000,'2001','농협');
+insert into tcher(mno, hr_pay, acc_no, bank) values(202,15000,'2002','기업은행');
+insert into tcher(mno, hr_pay, acc_no, bank) values(203,25000,'2003','우리은행');
+insert into tcher(mno, hr_pay, acc_no, bank) values(204,30000,'2004','국민은행');
+
+
+insert into memb(mno, name, tel, email, pwd) values(300,'m300','111-1111','m300@',password('1111'));
+insert into memb(mno, name, tel, email, pwd) values(301,'m301','111-1111','m301@',password('1111'));
+insert into memb(mno, name, tel, email, pwd) values(302,'m302','111-1111','m302@',password('1111'));
+insert into memb(mno, name, tel, email, pwd) values(303,'m303','111-1111','m303@',password('1111'));
+insert into memb(mno, name, tel, email, pwd) values(304,'m304','111-1111','m304@',password('1111'));
+
+
+insert into mgr(mno, dept, posi) values(300,'시설관리','주임');
+insert into mgr(mno, dept, posi) values(301,'시설관리','대리');
+insert into mgr(mno, dept, posi) values(302,'회계','과장');
+insert into mgr(mno, dept, posi) values(303,'교육','주임');
+insert into mgr(mno, dept, posi) values(304,'교육','과장');
+
+insert into mgr(mno, dept, posi) values(200,'교육','과장');
+
+insert into lect(lno,titl,sdt,edt,qnty,pric,nat_sup,sup_typ,dsct)
+values(1,'자바프로그래밍','2018-1-1','2018-5-30',30,100,'Y','미취업자','ok');
+insert into lect(lno,titl,sdt,edt,qnty,pric,nat_sup,sup_typ,dsct)
+values(2,'IoT프로그래밍','2018-3-1','2018-7-30',30,200,'Y','미취업자','ok');
+insert into lect(lno,titl,sdt,edt,qnty,pric,nat_sup,sup_typ,dsct)
+values(3,'윈도우프로그래밍','2018-5-1','2018-10-30',30,300,'Y','노동부','ok');
+
+
+
+
+update lect set mno=303 where lno=1;
+update lect set mno=304 where lno=3;
+
+
+update lect set rno=1 where lno=1;
+update lect set rno=4 where lno=2;
+
+
+insert into lect_appl(lano,lno,mno,rdt) values(1,1,100,'2017-11-2');
+insert into lect_appl(lano,lno,mno,rdt) values(2,1,101,'2017-11-3');
+insert into lect_appl(lano,lno,mno,rdt) values(3,1,102,'2017-11-4');
+insert into lect_appl(lano,lno,mno,rdt) values(5,2,104,'2017-11-6');
+insert into lect_appl(lano,lno,mno,rdt) values(6,2,100,'2017-11-7');
+insert into lect_appl(lano,lno,mno,rdt) values(7,3,101,'2017-11-8');
+insert into lect_appl(lano,lno,mno,rdt) values(8,3,102,'2017-11-9');
+insert into lect_appl(lano,lno,mno,rdt) values(10,3,104,'2017-11-11');
+
+
+
+
+
+
+select bank from stnt;
+
+
+
+
+select distinct bank from stnt;	// 중복없애기
+select distinct bank from tcher;
+
+select distinct bank from stnt union
+select distinct bank from tcher;	// 합쳐서 출력, union은 자동으로 중복값 제거
+
+select distinct bank from stnt union all
+select distinct bank from tcher;	// 중복값 제거하기싫으면 all을 붙여준다.
+
+select mno,name from memb;
+
+select mno,work,bank from stnt;
+
+
+- cross join
+select mno,name,mno,work,bank from memb cross join stnt;	//오류, 이유는 중복 컬럼명이있어서
+
+select memb.mno,name,stnt.mno,work,bank from memb cross join stnt;	// 중복 컬럼앞에 테이블명을 붙여줘서 해결
+
+select m.mno,name,s.mno,work,bank from memb m cross join stnt s;	// 테이블명이 너무길기때문에 별명을 사용해서 간결하게 사용
+
+
+- natural join : 같은 이름을 가진 컬럼 값을 기준으로 연결한다. 단, 두 테이블의 같은 이름의 데이터 컬럼이 없을 경우 연결하지못함, 
+같은 이름의 컬럼이 여러 개 있을 경우 특정 컬럼을 기준으로 연결하지 못한다. 모든 컬럼의 값이 일치할 경우에만 연결한다.
+
+select m.mno,name,s.mno,work,bank from memb m natural join stnt s;
+
+
+- join using : 두 테이블의 데이터를 연결할때 기준이 될 컬럼을 지정한다.
+
+select m.mno,name,s.mno,work,bank from memb m join stnt s using (mno);	//두테이블에 같은 이름을 가진 컬럼이 여러개 있다면 mno로 기준을 잡아준다.
+
+
+
+- join on : 문제점 : 반드시 on에서 지정한 컬럼의 값이 같을 경우에만 두테이블의 데이터가 연결된다. 만약 연결되지 않은 데이터도 출력하고 싶다면 이문법으로 불가능 하다
+
+select m.mno,name,s.mno,work,bank from memb m join stnt s on m.mno=s.mno; //만약 두테이블에 같은 이름을 가진 컬럼이 없으면, natural join을 수행하지 못한다. 또한 join using으로도 해결하수 없다. 이럴 경우 join ~ on 컬럼a=컬럼b 문법을 사용하여 각테이블의 어떤 컬럼과 값을 비교할 것인지 지정하라!
+
+
+
+select m.mno,name,work,bank from memb m join stnt s on m.mno=s.mno;	//학생의 정보만 나오고 강사의 정보는 나오지않는다.
+
+- left(right) join : 상대테이블에 연결할 대상이 없더라도 select에서 추출하는 방법, 기준을 오른쪽 왼쪽 정한다.
+
+select m.mno,name,work,bank from memb m left join stnt s on m.mno=s.mno;
+
+
+
+
+- 1단계
+select la.lano, la.mno, la.rdt  from lect_appl la;
+
+- 2단계
+select la.lano, m.name, la.rdt  from lect_appl la join memb m on la.mno=m.mno;
+
+- 3단계
+select la.lano, m.name, s.work, la.rdt  from lect_appl la 
+join memb m on la.mno=m.mno
+join stnt s on la.mno=s.mno;
+
+- 4단계
+select la.lano,l.titl, m.name, s.work, la.rdt  from lect_appl la 
+join memb m on la.mno=m.mno
+join stnt s on la.mno=s.mno
+join lect l on la.lno=l.lno;
+
+- 5단계
+select la.lano,l.titl, m.name, s.work, r.name, la.rdt  from lect_appl la 
+join memb m on la.mno=m.mno
+join stnt s on la.mno=s.mno
+join lect l on la.lno=l.lno
+left join room r on l.rno=r.rno;
+
+- 6단계
+select la.lano,l.titl, m.name, s.work, r.name roomname, m2.name, la.rdt  from lect_appl la 
+join memb m on la.mno=m.mno
+join stnt s on la.mno=s.mno
+join lect l on la.lno=l.lno
+left join room r on l.rno=r.rno
+left join memb m2 on l.mno=m2.mno;
+
+- 7단계
+select la.lano,l.titl, m.name, s.work, r.name roomname, m2.name,mr.posi, la.rdt  from lect_appl la 
+join memb m on la.mno=m.mno
+join stnt s on la.mno=s.mno
+join lect l on la.lno=l.lno
+left join room r on l.rno=r.rno
+left join memb m2 on l.mno=m2.mno
+left join mgr mr on l.mno=mr.mno;
+
+
